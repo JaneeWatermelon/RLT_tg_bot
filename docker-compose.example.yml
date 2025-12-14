@@ -1,0 +1,32 @@
+# version: '3.8'
+
+services:
+  backend:
+    build: .
+    command: ping 127.0.0.1
+    container_name: rlt-backend
+    volumes:
+      - .:/app
+      - assets_volume:/app/assets
+      # - media_volume:/app/media
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    container_name: rlt-postgres
+    env_file:
+      - dev.env
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: wah(f12f0a_a2faw9y
+      POSTGRES_DB: rlt_bot_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
+  assets_volume:
+  # media_volume:
