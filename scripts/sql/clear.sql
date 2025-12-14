@@ -1,0 +1,2 @@
+DROP TABLE videos CASCADE;
+DROP TABLE video_snapshots CASCADE;
