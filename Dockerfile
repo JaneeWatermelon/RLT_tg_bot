@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.13-alpine
 
 WORKDIR /app
 
@@ -19,5 +19,7 @@ VOLUME /app
 
 # Очистка кеша pip
 RUN find /venv -type d -name '__pycache__' -exec rm -rf {} +
+
+# ENTRYPOINT ["scripts/entrypoint.sh"]
 
 # CMD ["python", "core/bot.py"]

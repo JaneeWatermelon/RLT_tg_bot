@@ -1,8 +1,21 @@
 import json
 import os
 import asyncio
+import time
+
+import psycopg2
 import core.database as database
 import dotenv
+
+def wait_for_db(dsn, retries=10, delay=2):
+    for i in range(retries):
+        try:
+            psycopg2.connect(**dsn).close()
+            return
+        except psycopg2.OperationalError:
+            print("DB not ready, retrying...")
+            time.sleep(delay)
+    raise RuntimeError("DB not available")
 
 def main(db: database.Database):
     ASSETS_ROOT = os.getenv("ASSETS_ROOT")
@@ -65,12 +78,16 @@ def main(db: database.Database):
 if __name__ == "__main__":
     dotenv.load_dotenv("dev.env")
 
-    db = database.Database(
-        host=os.getenv("DB_HOST"), 
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD")
-    )
+    params = {
+        "host": os.getenv("DB_HOST"),
+        "database": os.getenv("DB_NAME"),
+        "user": os.getenv("DB_USER"),
+        "password": os.getenv("DB_PASSWORD"),
+    }
+
+    wait_for_db(params)
+
+    db = database.Database(**params)
 
     main(db)
 
