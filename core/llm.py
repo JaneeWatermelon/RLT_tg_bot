@@ -31,8 +31,8 @@ def text_to_sql(text: str) -> str:
                 "model": MODEL,
                 "system": prompt,
                 "prompt": text,
+                "think": False,
                 "stream": False,
-                # "raw": True,
                 "options": {
                     "temperature": 0
                 }

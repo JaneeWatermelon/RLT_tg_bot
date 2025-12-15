@@ -13,8 +13,8 @@ class TGbot:
         self.dispatcher.message.register(self.handle)
 
     def run(self):
-        self.dispatcher.run_polling(self.bot)
         print("Bot running successfully!")
+        self.dispatcher.run_polling(self.bot)
 
     async def handle(self, message: types.Message):
         value = 0
