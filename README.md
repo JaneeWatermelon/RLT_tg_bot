@@ -12,6 +12,7 @@ docker-compose --env-file dev.env -f docker-compose.example.yml up -d --build
 Перед этим необходимо создать и добавить в корневую директорию файл dev.env
 
 ## Файл dev.env имеет вид:
+```
 DEBUG=True
 BOT_API_KEY=bot_api_key
 
@@ -23,6 +24,7 @@ DB_PASSWORD=db_password
 
 ASSETS_ROOT=assets
 SQL_ROOT=scripts/sql
+```
 
 ---
 
@@ -52,6 +54,8 @@ SQL_ROOT=scripts/sql
 - assets/
     - prompt.txt # Prompt с описанием схемы данных
 - docker-compose.yml
+- Dockerfile
+- dev.env
 - requirements.txt
 - README.md
 
