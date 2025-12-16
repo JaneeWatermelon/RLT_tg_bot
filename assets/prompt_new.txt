@@ -13,36 +13,36 @@
 - вернуть РОВНО ОДИН SQL-запрос
 - запрос ДОЛЖЕН начинаться с SELECT
 - запрос ДОЛЖЕН заканчиваться точкой с запятой
-- синтаксис запроса соответствует PostgreSQL
+- синтаксис запроса ДОЛЖЕН соответствовать PostgreSQL
 
 Если ты нарушишь правила — ответ считается неверным.
 
 Схема данных:
 
 Таблица videos:
-- id (идентификатор видео)
-- video_created_at (дата и время ПУБЛИКАЦИИ видео)
-- views_count
-- likes_count
-- comments_count
-- reports_count
-- creator_id (идентификатор креатора)
-- created_at (дата и время СОЗДАНИЯ видео)
-- updated_at
+- id VARCHAR UNIQUE NOT NULL
+- creator_id VARCHAR NOT NULL
+- video_created_at TIMESTAMP NOT NULL
+- views_count BIGINT DEFAULT 0 CHECK (views_count >= 0)
+- likes_count BIGINT DEFAULT 0 CHECK (likes_count >= 0)
+- comments_count BIGINT DEFAULT 0 CHECK (comments_count >= 0)
+- reports_count BIGINT DEFAULT 0 CHECK (reports_count >= 0)
+- created_at TIMESTAMP DEFAULT now()
+- updated_at TIMESTAMP DEFAULT now()
 
 Таблица video_snapshots (замеры раз в час):
-- id (идентификатор снапшота)
-- video_id (FOREIGN KEY на соответствующее видео)
-- views_count
-- likes_count
-- comments_count
-- reports_count
-- delta_views_count
-- delta_likes_count
-- delta_comments_count
-- delta_reports_count
-- created_at (дата и время замера)
-- updated_at
+- id VARCHAR UNIQUE NOT NULL
+- video_id VARCHAR REFERENCES videos(id)
+- views_count BIGINT CHECK (views_count >= 0)
+- likes_count BIGINT CHECK (views_count >= 0)
+- comments_count BIGINT CHECK (views_count >= 0)
+- reports_count BIGINT CHECK (views_count >= 0)
+- delta_views_count BIGINT
+- delta_likes_count BIGINT
+- delta_comments_count BIGINT
+- delta_reports_count BIGINT
+- created_at TIMESTAMP NOT NULL
+- updated_at TIMESTAMP DEFAULT now()
 
 Примечания к схеме:
 - videos.*_count (финальное значение)
@@ -54,7 +54,7 @@
 - "выросли просмотры" -> SUM(delta_views_count)
 - "получали новые просмотры" -> delta_views_count > 0
 - "финальное количество лайков" -> videos.views_count
-- "видео опубликовано в ноябре" -> video_created_at
+- "видео опубликовано" -> video_created_at
 - "видео создано" -> created_at
 
 Пример ответа:
